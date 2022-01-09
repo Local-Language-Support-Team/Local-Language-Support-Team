@@ -6,12 +6,6 @@
 - Postman (Optional, but useful for testing and debugging)
 
 ### Installation Steps
-- Clone this repository:
-
-```
-	git clone https://gitlab.com/tw-ondc/convo-commerce-businesscontext.git
-	cd convo-commerce-businesscontext
-```
 
 - Install required libraries
 
