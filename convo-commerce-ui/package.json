@@ -1,0 +1,54 @@
+{
+  "name": "ondc-poc",
+  "version": "0.0.0",
+  "description": "A React UI Boilerplate for ThoughtWorks Projects",
+  "main": "./src/index.tsx",
+  "repository": "git@github.com:twCatalyst/ondc-poc.git",
+  "author": "TW",
+  "license": "",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@lhci/cli": "^0.8.2",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.0",
+    "prettier": "^2.3.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-sass-guidelines": "^8.0.0",
+    "stylelint-config-standard": "^22.0.0"
+  },
+  "resolutions": {
+    "glob-parent": "5.1.2",
+    "ansi-regex": "5.0.1",
+    "set-value": "4.0.1",
+    "immer": "9.0.6",
+    "browserslist": "4.16.5",
+    "trim": "0.0.3",
+    "ansi-html": "https://registry.npmjs.org/ansi-html-community/-/ansi-html-community-0.0.8.tgz"
+  },
+  "scripts": {
+    "link-all": "chmod +x ./scripts/link-all.sh && ./scripts/link-all.sh",
+    "eslint:fix": "eslint -c ./config/.eslintrc.js --fix './packages/**/*.{ts,tsx,js,jsx}'",
+    "eslint:check": "eslint -c ./config/.eslintrc.js './packages/**/*.{ts,tsx,js,jsx}'",
+    "prettier:fix": "prettier --config ./config/.prettierrc.json --ignore-path ./config/.prettierignore --write './packages/**/*.{ts,tsx,js,jsx}'",
+    "prettier:check": "prettier --config ./config/.prettierrc.json --ignore-path ./config/.prettierignore --check './packages/**/*.{ts,tsx,js,jsx}'",
+    "prepare": "husky install",
+    "postinstall": "sh talisman/talisman-precommit.sh",
+    "stylelint:check": "stylelint --config ./config/.stylelintrc.json --ignore-path ./config/.stylelintignore ./packages/**/*.{scss,css}",
+    "stylelint:fix": "stylelint --config ./config/.stylelintrc.json --ignore-path ./config/.stylelintignore ./packages/**/*.{scss,css} --fix"
+  },
+  "dependencies": {}
+}

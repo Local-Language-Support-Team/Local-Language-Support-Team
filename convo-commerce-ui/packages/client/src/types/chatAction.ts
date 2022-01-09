@@ -1,0 +1,41 @@
+/* eslint-disable */
+// TODO: Please remove this eslint disable once rest of the features are implemented.
+
+export enum ChatActionType {
+  VIEW_ORDERS = "VIEW_ORDERS",
+  VIEW_ORDER = "VIEW_ORDER",
+  VIEW_ORDER_DETAILS = "VIEW_ORDER_DETAILS",
+  SHOW_MORE_ORDERS = "SHOW_MORE_ORDERS",
+  UPDATE_ORDER = "UPDATE_ORDER",
+  ORDER_STATUS = "ORDER_STATUS",
+  GO_BACK = "GO_BACK",
+  VIEW_PRODUCTS = "VIEW_PRODUCTS",
+  VIEW_PRODUCT = "VIEW_PRODUCT",
+  VIEW_PRODUCT_DETAILS = "VIEW_PRODUCT_DETAILS",
+  SHOW_MORE_PRODUCTS = "SHOW_MORE_PRODUCTS",
+  ADD_PRODUCT = "ADD_PRODUCT",
+  SEARCH_CATALOGUE = "SEARCH_CATALOGUE",
+  UPDATE_PRODUCT = "UPDATE_PRODUCT",
+}
+
+export interface ChatAction {
+  type: ChatActionType;
+  payload: any;
+}
+
+export enum ChatContextType {
+  INITIAL = "INITIAL",
+  VIEW_ORDERS = "VIEW_ORDERS",
+  VIEW_ORDER = "VIEW_ORDER",
+  VIEW_ORDER_DETAILS = "VIEW_ORDER_DETAILS",
+  SHOW_MORE_ORDERS = "SHOW_MORE_ORDERS",
+  VIEW_PRODUCTS = "VIEW_PRODUCTS",
+  VIEW_PRODUCT = "VIEW_PRODUCT",
+  VIEW_PRODUCT_DETAILS = "VIEW_PRODUCT_DETAILS",
+  SHOW_MORE_PRODUCTS = "SHOW_MORE_PRODUCTS",
+}
+
+export interface ChatContext {
+  type: ChatContextType;
+  actions: ChatActionType[];
+}
