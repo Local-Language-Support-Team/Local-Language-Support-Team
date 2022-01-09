@@ -2,6 +2,8 @@
 
 A short demo video of the project in action can be seen [here](https://drive.google.com/file/d/1a-AlGHwSaDwlAR9GjOpZIByJPIlSRn2S/view?usp=sharing).
 
+Read more about the project [here](https://docs.google.com/document/d/10ymOPc3anjLRb24S7lMRPYi0IrRHd6t2Df5uI2Dn_qc/edit?usp=sharing)
+
 This project consists of the following parts
 
 - Business Context ([convo-commerce-businesscontext](convo-commerce-businesscontext/README.md))
