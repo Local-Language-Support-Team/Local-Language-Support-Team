@@ -44,7 +44,6 @@ dependencies {
 	implementation 'io.grpc:grpc-stub:1.37.0'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.modelmapper:modelmapper:2.4.5'
-	implementation 'net.sf.ehcache:ehcache-core:2.6.11'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
