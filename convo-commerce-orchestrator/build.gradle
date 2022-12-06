@@ -9,6 +9,10 @@ group = 'com.thoughtworks.ondc.poc'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+//bootRun {
+//	jvmArgs = [ "-Djavax.net.ssl.trustStore=/Users/priya/Conversational-Commerce/convo-commerce-orchestrator/src/main/resources/keycloak/baeldung.jks", "-Djavax.net.ssl.trustStorePassword=secret"]
+//}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
