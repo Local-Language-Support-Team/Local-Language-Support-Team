@@ -29,18 +29,24 @@ public class TranslationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(path = "e2i")
-    ResponseEntity<String> getIndicFromEnglish(@RequestParam String text, @RequestParam String target){
-        List<String> response = translationService.translateFromEnglishToIndic(Collections.singletonList(text), target);
-        if (response == null || response.size() == 0) {
-            return ResponseEntity.ok(null);
-        }
-        return ResponseEntity.ok(response.get(0));
-    }
+//    @GetMapping(path = "e2i")
+//    ResponseEntity<String> getIndicFromEnglish(@RequestParam String text, @RequestParam String target){
+//        List<String> response = translationService.translateFromEnglishToIndic(Collections.singletonList(text), target);
+//        if (response == null || response.size() == 0) {
+//            return ResponseEntity.ok(null);
+//        }
+//        return ResponseEntity.ok(response.get(0));
+//    }
+
+//    @PostMapping(path = "e2i")
+//    ResponseEntity<List<String>> getIndicFromEnglish(@RequestBody List<String> texts, @RequestParam String target) {
+//        List<String> response = translationService.translateFromEnglishToIndic(texts, target);
+//        return ResponseEntity.ok(response);
+//    }
 
     @PostMapping(path = "e2i")
-    ResponseEntity<List<String>> getIndicFromEnglish(@RequestBody List<String> texts, @RequestParam String target) {
-        List<String> response = translationService.translateFromEnglishToIndic(texts, target);
+    ResponseEntity<String> getIndicFromEnglish(@RequestBody String text, @RequestParam String target) {
+        String response = translationService.translateFromEnglishToIndic(text, target);
         return ResponseEntity.ok(response);
     }
 }

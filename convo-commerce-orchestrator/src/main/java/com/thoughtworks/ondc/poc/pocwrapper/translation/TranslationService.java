@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.thoughtworks.ondc.poc.pocwrapper.cache.CacheHelper;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Cache;
+import java.util.Collections;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -41,7 +43,21 @@ public class TranslationService {
         return response;
     }
 
-    public List<String> translateFromEnglishToIndic(List<String> text, String target) {
-        return translationWebClient.translateEnglishToIndic(text, target).getTranslatedText();
+//    public List<String> translateFromEnglishToIndic(List<String> text, String target) {
+//        return translationWebClient.translateEnglishToIndic(text, target).getTranslatedText();
+//    }
+
+    public String translateFromEnglishToIndic(String text, String target) {
+        Cache cache = cacheHelper.getAI4BharatCacheFile();
+        String response;
+        if (cache.get(text) == null) {
+            List<String> translatedText = translationWebClient.translateEnglishToIndic(new ArrayList<>(Collections.singleton(text)), target).getTranslatedText();
+            cache.put(new Element(text, translatedText.get(0)));
+            response = translatedText.get(0);
+        } else {
+            Object object = cache.get(text).getObjectValue();
+            response = (String) object;
+        }
+        return response;
     }
 }
