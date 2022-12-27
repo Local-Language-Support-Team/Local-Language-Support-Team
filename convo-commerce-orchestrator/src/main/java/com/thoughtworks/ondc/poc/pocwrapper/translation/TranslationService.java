@@ -31,9 +31,8 @@ public class TranslationService {
         Cache cache = cacheHelper.getAI4BharatCacheFile();
         String response;
         if(cache.get(text)==null) {
-            String translatedText = translationWebClient.translate(text, source, "en").getTranslatedText();
-            cache.put(new Element(text, translatedText));
-            response = translatedText;
+            response = translationWebClient.translate(text, source, "en").getTranslatedText();
+            cache.put(new Element(text, response));
         }
         else
         {
