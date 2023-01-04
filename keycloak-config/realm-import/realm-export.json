@@ -305,7 +305,7 @@
       "description": "",
       "rootUrl": "",
       "adminUrl": "",
-      "baseUrl": "https://localhost:8443/realms/local-language-support-realm/protocol/openid-connect/token",
+      "baseUrl": "http://localhost:8082/realms/local-language-support-realm/protocol/openid-connect/token",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
