@@ -1,11 +1,14 @@
 package com.thoughtworks.ondc.poc.pocwrapper.context.mlapi;
 
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +39,7 @@ public class MLContextWebClient implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.webClient = builder
-                .baseUrl(baseUrl)
-                .build();
+        HttpClient httpClient = HttpClient.create().baseUrl(baseUrl).resolver(DefaultAddressResolverGroup.INSTANCE);
+        this.webClient = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build();
     }
 }

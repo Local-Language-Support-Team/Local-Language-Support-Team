@@ -182,22 +182,6 @@ const Home = () => {
         );
 
         const context = await resp.json();
-        if (context.data != null) {
-          if (context.data.length > 0 && context.data[0].ProdName) {
-            const translatedResp = await fetch(`http://localhost:8080/v1/translate/e2i?&target=${selectedLang.code}`,
-              {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(context.data.map((data: any) => data.ProdName))
-              });
-
-            const translatedArray = await translatedResp.json();
-
-            translatedArray.map((resp: string, index: number) => {
-              context.data[index].ProdName = resp;
-            });
-          }
-        }
         handleAction(context);
 
       } else if (!isRecording) {
