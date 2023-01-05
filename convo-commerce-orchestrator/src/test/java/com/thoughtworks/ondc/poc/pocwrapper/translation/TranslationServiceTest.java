@@ -18,8 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TranslationServiceTest {
     @Mock
     TranslationWebClient translationWebClient = new TranslationWebClient();
-    @Mock
-    TranslationResponse translationResponse = new TranslationResponse();
+
     TranslationService translationService = new TranslationService(translationWebClient);
 
     @InjectMocks
@@ -28,33 +27,6 @@ class TranslationServiceTest {
     @InjectMocks
     public static CacheManagerConfig cacheManagerConfig;
 
-
-    @Test
-    public void shouldTranslateFromIndicToEnglishWhenNotInCache() {
-//        String text = "कश्मीरी सेब-प्रति किलोग्राम";
-//        String source = "hi";
-//        String response = "Kashmiri Apple - per Kg";
-//
-//        cacheManagerConfig.getCacheManager();
-//        cacheHelper = new CacheHelper();
-//        cacheHelper.cacheManagerConfig = cacheManagerConfig;
-//        translationService.cacheHelper = cacheHelper;
-//        Cache cache = cacheHelper.getAI4BharatCacheFile();
-//
-//
-//        System.out.println(translationService + "trser");
-//
-////        translationResponse = translationWebClient.translate(text,source,"en");
-////        System.out.println(translationResponse.getTranslatedText()+"FDVDFV");
-//        doReturn(TranslationResponse(translatedText=).when(translationWebClient).translate(text, source, "en");
-////        assert(translationService.translateFromIndicToEnglish(text,source)).equals(response);
-//        translationService.translateFromIndicToEnglish(text, source);
-//
-//        Object object = cache.get(text).getObjectValue();
-//        String actualResponse = (String) object;
-//        assertEquals(actualResponse,response);
-
-    }
 
 
     @Test
