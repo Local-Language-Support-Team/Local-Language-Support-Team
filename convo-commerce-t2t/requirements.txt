@@ -10,4 +10,4 @@ indic-nlp-library
 mosestokenizer 
 subword-nmt
 #Install fairseq from source 
-#fairseq
+fairseq==0.12.0
