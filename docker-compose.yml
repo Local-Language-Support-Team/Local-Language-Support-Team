@@ -5,11 +5,21 @@ services:
     image: orchestrator
     ports:
       - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
 
   duckling:
     image: rasa/duckling
     ports:
       - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
 
   rasa:
     image: rasa-module
@@ -17,6 +27,11 @@ services:
       - "8081:8081"
       - "5005:5005"
       - "5055:5055"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 3G
 
   ai4bharat:
     image: ai4bharat
@@ -34,8 +49,18 @@ services:
       - /Users/priya/Conversational-Commerce/vakyansh/container_vol:/opt/speech_recognition_open_api/deployed_models/
     ports:
       - "50051:50051"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 6G
 
-  keycloak:
-    image: keycloak
-    ports:
-      - "8082:8082"
+#  keycloak:
+#    image: keycloak
+#    ports:
+#      - "8082:8082"
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "2"
+#          memory: 2G

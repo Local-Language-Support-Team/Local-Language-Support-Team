@@ -173,11 +173,47 @@ const Home = () => {
         formData.append("senderId", "convo-commerce-ui");
         formData.append("sourceLang", selectedLang.code);
         formData.append("file", blob, "audio.wav");
+
+
+        var details = {
+            'client_id': 'local-language-support-client',
+            'client_secret': '**********',
+            'grant_type': 'client_credentials'
+        };
+
+        var formBody = [];
+        for (var property in details) {
+          var encodedKey = encodeURIComponent(property);
+          var encodedValue = encodeURIComponent(details[property]);
+          formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&")
+        let token;
+        await fetch(
+                  "http://localhost:8082/realms/local-language-support-realm/protocol/openid-connect/token",
+                  {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                      },
+                    body: formBody,
+                  }
+                ).then(response => response.json())
+                .then(data => {
+                token=data.access_token
+                })
+
+        console.log(token)
+
         const resp = await fetch(
           "http://localhost:8080/v1/context/audio",
           {
             method: "POST",
+            headers: {
+                       'Authorization': 'Bearer ' + token
+                   },
             body: formData,
+
           }
         );
 
