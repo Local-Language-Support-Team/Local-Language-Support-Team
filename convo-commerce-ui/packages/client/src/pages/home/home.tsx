@@ -203,9 +203,8 @@ const Home = () => {
                 token=data.access_token
                 })
 
-        console.log(token)
-
-        const resp = await fetch(
+        let response_text;
+        await fetch(
           "http://localhost:8080/v1/context/audio",
           {
             method: "POST",
@@ -215,10 +214,14 @@ const Home = () => {
             body: formData,
 
           }
-        );
+        ).then(response => response.json())
+        .then(data => {
+            response_text=data.translatedText
+        });
 
-        const context = await resp.json();
-        handleAction(context);
+//         const context = await resp.json();
+
+        handleAction(response_text);
 
       } else if (!isRecording) {
         setIsRecording(true);
@@ -229,36 +232,45 @@ const Home = () => {
     }
   };
 
-  const handleAction = (context: ContextResponse) => {
-    tableData = context.data;
-
-    if (tableData == null || tableData.length == 0) {
-      updateMessages([
-        ...messages,
-        {
-          id: `${messages.length + 3}`,
-          type: MessageType.TEXT,
-          creatorId: "SERVER",
-          content: context?.nextStep?.message,
-        },
-      ]);
-    } else {
-      updateMessages([
-        ...messages,
-        {
-          id: `${messages.length + 2}`,
-          type: MessageType.VIEW_PRODUCTS,
-          creatorId: "SERVER",
-          content: <TabularDisplay columns={getColumns(tableData)} title={context.context} />,
-        },
-        {
-          id: `${messages.length + 3}`,
-          type: MessageType.TEXT,
-          creatorId: "SERVER",
-          content: "Here are your results",
-        },
-      ]);
-    }
+  const handleAction = (context: String) => {
+        updateMessages([
+                ...messages,
+                {
+                  id: `${messages.length + 3}`,
+                  type: MessageType.TEXT,
+                  creatorId: "SERVER",
+                  content: context,
+                },
+              ]);
+//     tableData = context.data;
+//
+//     if (tableData == null || tableData.length == 0) {
+//       updateMessages([
+//         ...messages,
+//         {
+//           id: `${messages.length + 3}`,
+//           type: MessageType.TEXT,
+//           creatorId: "SERVER",
+//           content: context?.nextStep?.message,
+//         },
+//       ]);
+//     } else {
+//       updateMessages([
+//         ...messages,
+//         {
+//           id: `${messages.length + 2}`,
+//           type: MessageType.VIEW_PRODUCTS,
+//           creatorId: "SERVER",
+//           content: <TabularDisplay columns={getColumns(tableData)} title={context.context} />,
+//         },
+//         {
+//           id: `${messages.length + 3}`,
+//           type: MessageType.TEXT,
+//           creatorId: "SERVER",
+//           content: "Here are your results",
+//         },
+//       ]);
+//     }
   }
 
   const getColumns = (data: any[]) => {
