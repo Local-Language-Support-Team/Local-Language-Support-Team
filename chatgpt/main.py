@@ -5,7 +5,7 @@ import openai
 
 app = Flask(__name__)
 # Load your API key from an environment variable or secret management service
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/chatgpt", methods=['POST'])
 def process_req():
