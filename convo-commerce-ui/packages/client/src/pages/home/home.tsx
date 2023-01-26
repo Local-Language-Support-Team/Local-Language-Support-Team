@@ -17,6 +17,12 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 
 import menuImg from "../../images/menu.png";
 import micImg from "../../images/mic.png";
+import homepage from "../../images/homepage.png";
+import hp from "../../images/hp.png";
+import scanpay from "../../images/scanpay.png";
+import successful from "../../images/successful.png";
+import pin from "../../images/pin.png";
+import password from "../../images/password.png";
 
 const supportedLangs = [
   {
@@ -150,6 +156,10 @@ const Home = () => {
   const chatContentRef = useRef<HTMLElement>(null);
   const [messages, updateMessages] =
     useState<Message<keyof typeof MessageType>[]>(initialMessages);
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [imageUrl, setImageUrl] = useState(hp);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     if (chatContentRef.current?.scrollTo) {
@@ -158,6 +168,35 @@ const Home = () => {
         behavior: "smooth",
       });
     }
+    const handleClick = (event) => {
+          if (sectionRef.current && !sectionRef.current.contains(event.target)) return;
+          setLoading(true);
+          setTimeout(() => {
+            if(count%5 == 0 ){
+                setImageUrl(password)
+                setCount(count+1)
+            }
+            if(count%5 == 1){
+                setImageUrl(homepage)
+                setCount(count+1)
+            }
+            if(count%5 == 2){
+                setImageUrl(scanpay)
+                setCount(count+1)
+            }
+            if(count%5 == 3){
+                setImageUrl(pin)
+                setCount(count+1)
+            }
+            if(count%5 == 4){
+                setImageUrl(successful)
+                setCount(count+1)
+            }
+            setLoading(false);
+          }, 1000);
+        };
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
   });
 
   const recordAudio = async () => {
@@ -203,8 +242,6 @@ const Home = () => {
                 token=data.access_token
                 })
 
-        console.log(token)
-
         const resp = await fetch(
           "http://localhost:8080/v1/context/audio",
           {
@@ -232,6 +269,8 @@ const Home = () => {
   const handleAction = (context: ContextResponse) => {
     tableData = context.data;
 
+    let image = `data:image/png;base64,${context.nextStep.message}`;
+    setImageUrl(image)
     if (tableData == null || tableData.length == 0) {
       updateMessages([
         ...messages,
@@ -239,7 +278,7 @@ const Home = () => {
           id: `${messages.length + 3}`,
           type: MessageType.TEXT,
           creatorId: "SERVER",
-          content: context?.nextStep?.message,
+          content: <Image src={imageUrl} />,
         },
       ]);
     } else {
@@ -281,17 +320,15 @@ const Home = () => {
 
   return (
     <>
-      <main className="home-page">
+      <main className="home-page" style={{marginLeft:'730px',maxWidth:'350px'}}>
         <article className="chat-box">
           <section className="chat-header">
             <Heading>One Nation</Heading>
           </section>
-          <section className="chat-content" ref={chatContentRef}>
-            {messages.map((message) => (
-              <CMessage key={message.id} message={message} />
-            ))}
+          <section className="chat-content" ref={sectionRef}>
+                <Image src={imageUrl} style={{ height:'680px'}}/>
           </section>
-          <section className="chat-input">
+          <section className="chat-input" style={{maxWidth:'350px'}}>
             <div style={{ maxWidth: '100px', display: 'inline' }}>
               <Menu menuButton={<MenuButton><Image src={menuImg} alt="menu" /></MenuButton>}>
                 {

@@ -69,7 +69,7 @@ public class ContextController {
         log.info("Fetching context... ");
         ContextResponse response = contextService.getContext(translatedText);
 
-        if(response.getData().get(0).get("ProdName") == null){
+        if(response.getData() == null){
             return response;
         }
 

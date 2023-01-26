@@ -5,60 +5,75 @@ stories:
   - intent: greet
   - action: utter_greet
 
-- story: order shoes
-  steps:
-  - intent: order_shoes
-  - action: utter_order_shoes
+#- story: order shoes
+#  steps:
+#  - intent: order_shoes
+#  - action: utter_order_shoes
 
-# cancel stories
-
-- story: User stops product_stock
-  steps:
-  - active_loop: product_stock_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops order_status
-  steps:
-  - active_loop: order_status_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops cancel_form
-  steps:
-  - active_loop: cancel_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops return_form
-  steps:
-  - active_loop: return_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops product_updates_form
-  steps:
-  - active_loop: product_updates_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
+## cancel stories
+#
+#- story: User stops product_stock
+#  steps:
+#  - active_loop: product_stock_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+#
+#- story: User stops order_status
+#  steps:
+#  - active_loop: order_status_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+#
+#- story: User stops cancel_form
+#  steps:
+#  - active_loop: cancel_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+#
+#- story: User stops return_form
+#  steps:
+#  - active_loop: return_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+#
+#- story: User stops product_updates_form
+#  steps:
+#  - active_loop: product_updates_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+#
 # this is to demonstrate adding metadata to a response
 - story: user asks for name
   steps:
   - intent: whats_your_name
   - action: action_give_name
+
+- story: Scan, Say Amount, Add Remarks, and Make Payment
+  steps:
+  - intent: scanner
+  - action: action_open_scanner
+  - intent: amount
+  - action: action_say_amount
+  - intent: account_selection
+  - action: action_select_account
+  - intent: remarks
+  - action: action_add_remarks
+  - intent: add_to_favourites
+  - action: action_add_to_favourites
+  - intent: payment
+  - action: action_make_payment

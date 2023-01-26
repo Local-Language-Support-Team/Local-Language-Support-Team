@@ -17,6 +17,12 @@ intents:
 - out_of_scope
 - nlu_fallback
 - whats_your_name
+- scanner
+- amount
+- account_selection
+- remarks
+- add_to_favourites
+- payment
 entities:
 - email
 - name
@@ -265,6 +271,12 @@ actions:
 - action_cancel_order
 - action_return
 - action_give_name
+- action_open_scanner
+- action_say_amount
+- action_select_account
+- action_add_remarks
+- action_add_to_favourites
+- action_make_payment
 forms:
   order_status_form:
     ignored_intents: []

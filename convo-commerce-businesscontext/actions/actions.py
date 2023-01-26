@@ -5,6 +5,7 @@ from rasa_sdk.events import SlotSet
 from rasa_sdk.events import FollowupAction
 from rasa_sdk.events import BotUttered
 import sqlite3
+import base64
 
 # change this to the location of your SQLite file
 path_to_db = "actions/example.db"
@@ -347,3 +348,105 @@ class GiveName(Action):
         )
 
         return [evt]
+
+class OpenScanner(Action):
+    def name(self) -> Text:
+        return "action_open_scanner"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/scanner.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
+
+class SayAmount(Action):
+    def name(self) -> Text:
+        return "action_say_amount"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/money.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
+
+class AccountSelection(Action):
+    def name(self) -> Text:
+        return "action_select_account"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/chooseAcc.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
+
+class AddRemarks(Action):
+    def name(self) -> Text:
+        return "action_add_remarks"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/remarks.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
+
+class AddToFavourites(Action):
+    def name(self) -> Text:
+        return "action_add_to_favourites"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/addfav.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
+
+class MakePayment(Action):
+    def name(self) -> Text:
+        return "action_make_payment"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        with open("actions/pay.png", "rb") as image_file:
+            image = base64.b64encode(image_file.read()).decode('utf-8')
+
+        dispatcher.utter_message(image)
+        return []
