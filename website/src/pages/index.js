@@ -11,8 +11,9 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <h1 className="hero__subtitle">{siteConfig.title}</h1>
+        <p className="hero__subtitle">for</p>
+        <h1 className="hero__title">{siteConfig.tagline}</h1>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -38,15 +39,14 @@ export default function Home() {
       <img
             type="image/png"
             src="img/local-language-support-logo.png"
-            alt="Cloud carbon footprint recommendations dashboard, screen capture"
           />
           </div>
           <div className={clsx(styles.overviewItem, styles.overviewItemText)}>
         <h2 className={styles.overviewTitle}>
-        One Nation - Let's talk commerce
+        One Nation - Let’s talk commerce! Speak your language.
         </h2>
         <p className={styles.overviewText}>
-        Local language support mainly intends to fetch the content in the native language of the users enhancing the user experience and showing the content that is more relevant to the question posed by the user.
+        If we need to solve the adoption problem we need to communicate in a language closer to our hearts and what better than our native languages to do so. And that’s the idea behind Conversational Commerce.
         </p>
       </div>
         </section>

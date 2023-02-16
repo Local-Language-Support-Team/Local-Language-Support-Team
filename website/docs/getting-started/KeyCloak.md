@@ -24,5 +24,5 @@ To create new client id in local-language-support-realm
     3. Click create client and select client type as openid connect and provide client-id
     4. Click next, toggle the client authentication and check the service accounts roles
     5. Click save
-    6. Next click on the client-id -\> credentials to see the client-secret
+    6. Next click on the client-id -> credentials to see the client-secret
 

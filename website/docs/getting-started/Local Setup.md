@@ -51,7 +51,7 @@ There are 4 modules which are separated and each have to be run independently of
 
 - git clone https://github.com/AI4Bharat/indicTrans.git
 - ` cp -r indicTrans/inference inference/ `
-- ` cp -r indicTrans/model\_configs . `
+- ` cp -r indicTrans/model_configs . `
 - create 2 new files in inference directory =\> setup.cfg and pyproject.toml copy paste the below code in respective files
 
     In setup.cfg
@@ -98,7 +98,7 @@ There are 4 modules which are separated and each have to be run independently of
 
 - Download AI4Bharat indic2 models and update environment variables. Download both the models from below link in the path and export it to T2T\_MODEL\_PATH from [https://github.com/AI4Bharat/indicTrans#download-indictrans-models](https://github.com/AI4Bharat/indicTrans#download-indictrans-models) and place it inside indic2models directory inside your project
 
- ` export T2T\_MODEL\_PATH=\<path\_to\_project\>/indic2models `
+ ` export T2T_MODEL_PATH=<path_to_project>/indic2models `
 
 -  Run the application
 
@@ -143,19 +143,19 @@ There are 4 modules which are separated and each have to be run independently of
 
 ## sunbird-vakyansh
 
-- Create a \<project\_directory\>
+- Create a <project_directory>
 
- ` cd \<project\_directory\> `
+ ` cd <project_directory> `
 
-- Inside \<project\_directory\>/container\_vol do the following
+- Inside <project_directory>/container_vol do the following
 
-- Create deployed\_models/\<language\_name\>
+- Create deployed\_models/<language\_name\>
 - Create model\_dict.json and add language configurations. Example (for Hindi):
     ```
     {
     "hi" : {
 
-    "path": "/deployed\_models/hindi/hindi.pt",
+    "path": "/deployed_models/hindi/hindi.pt",
 
     "enablePunctuation" : false,
 
@@ -165,7 +165,7 @@ There are 4 modules which are separated and each have to be run independently of
 
     }
     ```
-- Inside \<project\_directory\>/container\_vol/ download desired language models from [https://storage.googleapis.com/asr-public-models/data-sources-deployment](https://storage.googleapis.com/asr-public-models/data-sources-deployment)
+- Inside <project\_directory\>/container\_vol/ download desired language models from [https://storage.googleapis.com/asr-public-models/data-sources-deployment](https://storage.googleapis.com/asr-public-models/data-sources-deployment)
 
     Example(for Hindi)
 
@@ -176,9 +176,9 @@ There are 4 modules which are separated and each have to be run independently of
 
 - Pull the docker image
 
-    ` docker pull gcr.io/ekstepspeechrecognition/speech\_recognition\_model\_api:3.0.4 `
+    ` docker pull gcr.io/ekstepspeechrecognition/speech_recognition_model_api:3.0.4 `
 
 - Once these are setup,you can run sunbird Vakyansh using the Docker image available on gcr.io using the following command
     ```
-  docker run -m 80000m -itd -p 50051:50051 --name speech\_recognition\_open\_api -v \<your-project-path\>/container\_vol:/opt/speech\_recognition\_open\_api/deployed\_models/ gcr.io/ekstepspeechrecognition/speech\_recognition\_model\_api:3.0.4 
+  docker run -m 80000m -itd -p 50051:50051 --name speech_recognition_open_api -v <your-project-path>/container_vol:/opt/speech_recognition_open_api/deployed_models/ gcr.io/ekstepspeechrecognition/speech_recognition_model_api:3.0.4 
     ```
