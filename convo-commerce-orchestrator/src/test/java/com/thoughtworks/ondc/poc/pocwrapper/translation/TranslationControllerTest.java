@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,7 +33,7 @@ public class TranslationControllerTest {
         when(translationService.translateFromHindiToEnglish(text)).thenReturn(response);
 
         MvcResult mvcResult = mockMvc.perform(get("/v1/translate/hindi")
-                        .param("text",text).with(jwt()))
+                        .param("text",text))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -52,7 +51,7 @@ public class TranslationControllerTest {
 
         MvcResult mvcResult = mockMvc.perform(get("/v1/translate/i2e")
                         .param("text",text)
-                .param("source",source).with(jwt()))
+                .param("source",source))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -69,7 +68,7 @@ public class TranslationControllerTest {
 
         when(translationService.translateFromEnglishToIndic(texts,target)).thenReturn(response);
 
-        mockMvc.perform(post("/v1/translate/e2i?target=hi").with(jwt())
+        mockMvc.perform(post("/v1/translate/e2i?target=hi")
                 .contentType(MediaType.TEXT_PLAIN_VALUE)
                 .content(texts))
                 .andExpect(status().isOk());
