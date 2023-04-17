@@ -1,7 +1,6 @@
 package com.thoughtworks.ondc.poc.pocwrapper.context;
 
-import com.ekstep.endpoints.speech_recognition.Language;
-import com.thoughtworks.ondc.poc.pocwrapper.speech.SpeechService;
+import com.thoughtworks.ondc.poc.pocwrapper.asr.SpeechService;
 import com.thoughtworks.ondc.poc.pocwrapper.translation.TranslationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +53,7 @@ public class ContextController {
             @RequestParam(name = "sourceLang") String sourceLang,
             @RequestParam(name = "file") MultipartFile file) throws IOException, InterruptedException {
         log.info("Audio size is : " + file.getSize());
-        String indicText = speechService.getTextFromFile(file, Language.LanguageCode.valueOf(sourceLang));
+        String indicText = speechService.getTextFromFile(file, sourceLang);
         log.info("Audio to Text : " + indicText);
 
         if (indicText.isEmpty()) {
