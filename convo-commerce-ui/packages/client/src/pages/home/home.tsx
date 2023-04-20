@@ -21,19 +21,19 @@ import micImg from "../../images/mic.png";
 const supportedLangs = [
   {
     name: "Hindi",
-    code: "hi"
+    code: "hindi"
   },
   {
     name: "Telugu",
-    code: "te"
+    code: "telugu"
   },
   {
     name: "Kannada",
-    code: "ka"
+    code: "kannada"
   },
   {
     name: "Malayalam",
-    code: "ml"
+    code: "malayalam"
   }
 ];
 

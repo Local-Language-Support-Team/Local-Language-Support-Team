@@ -1,4 +1,5 @@
 package com.thoughtworks.ondc.poc.pocwrapper.context.mlapi;
+import com.thoughtworks.ondc.poc.pocwrapper.context.RequestData;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import com.thoughtworks.ondc.poc.pocwrapper.cache.CacheHelper;
@@ -22,19 +23,11 @@ public class MLContextService implements ContextService {
     MLContextWebClient mlContextWebClient;
 
     @Override
-    public ContextResponse getContext(String contextInput) {
+    public ContextResponse getContext(String contextInput, RequestData requestData) {
         MLContextResponse response;
         Cache cache = cacheHelper.getRasaCacheFile();
-        if(cache.get(contextInput)==null) {
-            MLContextResponse mlContextResponse = mlContextWebClient.getContext(contextInput);
-            cache.put(new Element(contextInput, mlContextResponse));
-            response = mlContextResponse;
-        }
-        else
-        {
-            Object object = cache.get(contextInput).getObjectValue();
-            response = (MLContextResponse)object;
-        }
+        MLContextResponse mlContextResponse = mlContextWebClient.getContext(contextInput,requestData);
+        response = mlContextResponse;
         return modelMapper.map(response, ContextResponse.class);
     }
 

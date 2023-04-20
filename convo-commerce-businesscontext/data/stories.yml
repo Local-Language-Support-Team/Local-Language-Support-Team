@@ -1,64 +1,32 @@
 version: "2.0"
 stories:
-- story: intro
-  steps:
-  - intent: greet
-  - action: utter_greet
-
-- story: order shoes
-  steps:
-  - intent: order_shoes
-  - action: utter_order_shoes
-
-# cancel stories
-
-- story: User stops product_stock
-  steps:
-  - active_loop: product_stock_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops order_status
-  steps:
-  - active_loop: order_status_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops cancel_form
-  steps:
-  - active_loop: cancel_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops return_form
-  steps:
-  - active_loop: return_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-- story: User stops product_updates_form
-  steps:
-  - active_loop: product_updates_form
-  - intent: deny
-  - action: utter_start_over
-  - action: utter_greet
-  - action: action_deactivate_loop
-  - active_loop: null
-
-# this is to demonstrate adding metadata to a response
-- story: user asks for name
-  steps:
-  - intent: whats_your_name
-  - action: action_give_name
+  - story: user asks for account balance
+    steps:
+      - intent: ask_account_balance
+      - action: action_account_balance
+      - active_loop: null
+  - story: user asks for registration to online banking
+    steps:
+      - intent: register_user
+      - action: action_register_user
+      - active_loop: null
+  - story: user asks for removing online banking user account
+    steps:
+      - intent: remove_user
+      - action: action_remove_user
+      - active_loop: null
+  - story: user asks for last 10 transactions history
+    steps:
+      - intent: transaction_history
+      - action: action_transaction_history
+      - active_loop: null
+  - story: user asks for account information
+    steps:
+      - intent: user_information
+      - action: action_user_information
+      - active_loop: null
+  - story: user asks for transfer money
+    steps:
+      - intent: transfer_money
+      - action: action_transfer_money
+      - active_loop: null

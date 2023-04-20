@@ -2,348 +2,178 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
-from rasa_sdk.events import FollowupAction
-from rasa_sdk.events import BotUttered
-import sqlite3
+import requests
+import json
 
-# change this to the location of your SQLite file
-path_to_db = "actions/example.db"
-path_to_new_db = "actions/convo-commerce.db"
-
-
-class ActionProductSearch(Action):
+class ActionAccountBalance(Action):
     def name(self) -> Text:
-        return "action_product_search"
+        return "action_account_balance"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        # connect to DB
-        connection = sqlite3.connect(path_to_new_db)
-        cursor = connection.cursor()
+        nick_name=tracker.latest_message.get('metadata').get('nick_name')
 
-        # get slots and save as tuple
-        prod_category_slot = tracker.get_slot("productCategory")
-        prod_name_slot = tracker.get_slot("productName")
-        prod = [("%" + str(prod_category_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%")]
-        products_query = "SELECT ProdImg,ProdName,ProdCategory,InventorySize FROM products"
+        url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
+        data = {
+        "action": "balance",
+        "nick_name":nick_name
+         }
+        json_data = json.dumps(data)
+        print("json_data====",json_data)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.get(url,headers=headers,data=json_data) # API call
 
-        print(f"Query: {products_query}; Category: {prod_category_slot}, Name:{prod_name_slot}")
-        if prod_category_slot is None and prod_name_slot is None:
-            cursor.execute(products_query)
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-        else:    
-            cursor.execute(
-                products_query + " WHERE ProdCategory like (?) or ProdName like (?) or Tags like (?) ",
-                tuple(prod))
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-        
-        dispatcher.utter_message(template="utter_in_stock", data=r)
-        connection.close()
-        slots_to_reset = ["productCategory","productName"]
-        return [SlotSet(slot, None) for slot in slots_to_reset]
-
-
-class ActionProductSearchFilter(Action):
-    def name(self) -> Text:
-        return "action_product_filter"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-
-        # connect to DB
-        connection = sqlite3.connect(path_to_new_db)
-        cursor = connection.cursor()
-
-        # get slots and save as tuple
-        # prod_category_slot = tracker.get_slot("productCategory")
-        # prod_name_slot = tracker.get_slot("productName")
-
-        prod_category_slot = next(tracker.get_latest_entity_values("productCategory"), None)
-        prod_name_slot = next(tracker.get_latest_entity_values("productName"), None)
-        prod_inventory_size = next(tracker.get_latest_entity_values('number'), None)
-
-        prod = [("%" + str(prod_category_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%"),
-                (str(prod_inventory_size)),]
-        products_query = "SELECT ProdImg,ProdName,ProdCategory,InventorySize FROM products"
-
-        print(f"Query: {products_query}; Category: {prod_category_slot}, Name:{prod_name_slot}")
-        if prod_category_slot is None and prod_name_slot is None:
-            cursor.execute(products_query)
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-            dispatcher.utter_message(template="utter_no_stock")
-        else:    
-            cursor.execute(
-                products_query + " WHERE (ProdCategory like (?) or ProdName like (?) or Tags like (?) AND InventorySize >= (?))",
-                tuple(prod))
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-            dispatcher.utter_message(template="utter_in_stock", data=r)
-        
-        
-        connection.close()
-        slots_to_reset = ["productCategory","productName"]
-        return [SlotSet(slot, None) for slot in slots_to_reset]
-
-
-class ActionOrderSearchFilter(Action):
-    def name(self) -> Text:
-        return "action_order_filter"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-
-        # connect to DB
-        connection = sqlite3.connect(path_to_new_db)
-        cursor = connection.cursor()
-
-        # get slots and save as tuple
-        prod_category_slot = tracker.get_slot("productCategory")
-        prod_name_slot = tracker.get_slot("productName")
-        prod_inventory_size = next(tracker.get_latest_entity_values('number'), None)
-
-        prod = [("%" + str(prod_category_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%"),
-                ("%" + str(prod_name_slot) + "%"),
-                (str(prod_inventory_size)),]
-        products_query = "SELECT ProdImg,ProdName,ProdCategory,InventorySize FROM products"
-
-        print(f"Query: {products_query}; Category: {prod_category_slot}, Name:{prod_name_slot}")
-        if prod_category_slot is None and prod_name_slot is None:
-            dispatcher.utter_message(template="utter_no_stock")
-            # r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-        else:    
-            cursor.execute(
-                products_query + " WHERE (ProdCategory like (?) or ProdName like (?) or Tags like (?) AND InventorySize <= (?))",
-                tuple(prod))
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]).replace("'", '"')
-            dispatcher.utter_message(template="utter_in_stock", data=r)
-        
-        
-        connection.close()
-        slots_to_reset = ["productCategory","productName"]
-        return [SlotSet(slot, None) for slot in slots_to_reset]
-
-
-class ActionProductAdd(Action):
-    def name(self) -> Text:
-        return "action_product_add"
-
-    def run(
-            self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-
-        # connect to DB
-        connection = sqlite3.connect(path_to_new_db)
-        cursor = connection.cursor()
-
-        # get slots and save as tuple
-        # prod_inventory_size = tracker.get_slot("inventorySize")
-        prod_inventory_size = next(tracker.get_latest_entity_values('number'), None)
-        prod_name_slot = tracker.get_slot("productName")
-
-        prod = [(str(prod_inventory_size)), ("%" + str(prod_name_slot) + "%")]
-
-        cursor.execute("SELECT ProdName FROM products WHERE ProdName like (?)",
-                       tuple(("%" + str(prod_name_slot) + "%", )))
-        data_row = cursor.fetchone()
-
-        if data_row:
-            cursor.execute("update products set InventorySize = InventorySize + (?) where ProdName like (?)",
-                           tuple(prod))
-            connection.commit()
-            print("UPDATING", tuple(prod))
-            cursor.execute("select ProdName,InventorySize from products where ProdName like (?)",
-                           tuple(("%" + str(prod_name_slot) + "%",)))
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in
-                     cursor.fetchall()]).replace("'", '"')
+        if response.status_code == 200:
+           account_balance = response.text.strip('{}').split(':')[1]
         else:
-            cursor.execute("insert into products (InventorySize, ProdName) values (?,?)",
-                           tuple(prod))
-            connection.commit()
-            cursor.execute("select ProdName, InventorySize from products where ProdName like (?)",
-                           tuple(("%" + str(prod_name_slot) + "%",)))
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in
-                     cursor.fetchall()]).replace("'", '"')
-            print("UPDATING", tuple(prod), r)
+            print("Error:", response.status_code)
 
-        dispatcher.utter_message(template="utter_add_stock", pdata=r)
-        connection.close()
-        slots_to_reset = ["inventorySize", "productName"]
-        return [SlotSet(slot, None) for slot in slots_to_reset]
+        account_currency = 'INR'
 
+        # Set the account_balance slot with the fetched value
+        dispatcher.utter_message(template="utter_account_balance",account_balance=account_balance,account_currency=account_currency)
+        return []
 
-class SurveySubmit(Action):
+class ActionTransactionHistory(Action):
     def name(self) -> Text:
-        return "action_survey_submit"
+        return "action_transaction_history"
 
-    async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        nick_name=tracker.latest_message.get('metadata').get('nick_name')
 
-        dispatcher.utter_message(template="utter_open_feedback")
-        dispatcher.utter_message(template="utter_survey_end")
-        return [SlotSet("survey_complete", True)]
+        url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
+        data = {
+        "action": "history",
+        "nick_name":nick_name
+         }
+        json_data = json.dumps(data)
+        print("request data",json_data)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.get(url,headers=headers,data=json_data) # API call
+        message= response.text.replace("'",'"')
+
+        dispatcher.utter_message(template="utter_transaction_history",data=message)
 
 
-class OrderStatus(Action):
+class ActionRegisterUser(Action):
     def name(self) -> Text:
-        return "action_order_status"
+        return "action_register_user"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #tracker.get_slot['accountCurrency']
+         nick_name=tracker.latest_message.get('metadata').get('nick_name')
+         full_name=tracker.latest_message.get('metadata').get('full_name')
+         user_name=tracker.latest_message.get('metadata').get('user_name')
+         pin_number=tracker.latest_message.get('metadata').get('pin_number')
+         mobile_number=tracker.latest_message.get('metadata').get('mob_number')
+         upi_id=tracker.latest_message.get('metadata').get('upi_id')
 
-        # connect to DB
-        connection = sqlite3.connect(path_to_new_db)
-        cursor = connection.cursor()
+         url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
+         data = {
+         "action": "register",
+         "nick_name":nick_name,
+         "full_name":full_name,
+         "user_name":user_name,
+         "pin_number":pin_number,
+         "mob_number":mobile_number,
+         "upi_id":upi_id
+          }
+         json_data = json.dumps(data)
+         print("request data",json_data)
+         headers = {'Content-Type': 'application/json'}
+         response = requests.get(url,headers=headers,data=json_data) # API call
 
-        # name = tracker.get_slot("name")
-        name = next(tracker.get_latest_entity_values('name'), None)
-
-        prod = [("%" + str(name) + "%")]
-
-        print("person name", name)
-
-        if name is not None:
-            cursor.execute("SELECT CustomerName,Area,Status FROM orders WHERE CustomerName like (?)", prod)
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in
-                     cursor.fetchall()]).replace("'", '"')
-            dispatcher.utter_message(template="utter_order_status", status=r)
-
-            connection.close()
-            slots_to_reset = ["name"]
-            return [SlotSet(slot, None) for slot in slots_to_reset]
-        else:
-            # db didn't have an entry with this email
-            cursor.execute("SELECT CustomerName,Area,Status FROM orders")
-            r = str([dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in
-                     cursor.fetchall()]).replace("'", '"')
-
-            dispatcher.utter_message(template="utter_order_status", status=r)
-            connection.close()
-            slots_to_reset = ["name"]
-            return [SlotSet(slot, None) for slot in slots_to_reset]
+         if response.status_code == 200:
+                 dispatcher.utter_message(f"User Added successfully")
+         else:
+                 dispatcher.utter_message("Sorry, I couldn't complete registration.")
 
 
-class CancelOrder(Action):
+class ActionUserInformation(Action):
     def name(self) -> Text:
-        return "action_cancel_order"
+        return "action_user_information"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #tracker.get_slot['accountCurrency']
+         nick_name=tracker.latest_message.get('metadata').get('nick_name')
+         url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
+         data = {
+         "action": "details",
+         "nick_name":nick_name,
+         }
+         json_data = json.dumps(data)
+         print("request data",json_data)
+         headers = {'Content-Type': 'application/json'}
+         #headers = {'Accept':'application/json'}
+         response = requests.get(url,headers=headers,data=json_data) # API call
+         json_str = response.content.decode('utf-8')
+         user_details = json_str.replace("'", "\"").replace("ObjectId(", " ").replace(")", "")
 
-        # connect to DB
-        connection = sqlite3.connect(path_to_db)
-        cursor = connection.cursor()
+         print(user_details)
+         user_info = json.loads(user_details)
 
-        # get email slot
-        order_email = (tracker.get_slot("email"),)
+         if response.status_code == 200:
+                  nick_name= user_info["nick_name"],
+                  full_name=user_info["full_name"],
+                  user_name=user_info["user_name"],
+                  pin_number=user_info["pin_number"],
+                  mob_number=user_info["mob_number"],
+                  upi_id=user_info["upi_id"]
 
-        # retrieve row based on email
-        cursor.execute("SELECT * FROM orders WHERE order_email=?", order_email)
-        data_row = cursor.fetchone()
+                  dispatcher.utter_message(template="utter_user_details",nick_name=nick_name,full_name=full_name,mob_number=mob_number,upi_id=upi_id)
+         else:
+                  dispatcher.utter_message("Sorry, I couldn't find user details.")
 
-        if data_row:
-            # change status of entry
-            status = [("cancelled"), (tracker.get_slot("email"))]
-            cursor.execute("UPDATE orders SET status=? WHERE order_email=?", status)
-            connection.commit()
-            connection.close()
-
-            # confirm cancellation
-            dispatcher.utter_message(template="utter_order_cancel_finish")
-            return []
-        else:
-            # db didn't have an entry with this email
-            dispatcher.utter_message(template="utter_no_order")
-            connection.close()
-            return []
-
-
-class ReturnOrder(Action):
+class ActionTransferMoney(Action):
     def name(self) -> Text:
-        return "action_return"
+        return "action_transfer_money"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        # connect to DB
-        connection = sqlite3.connect(path_to_db)
-        cursor = connection.cursor()
+         url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
 
-        # get email slot
-        order_email = (tracker.get_slot("email"),)
+         amount=next(tracker.get_latest_entity_values('number'), None)
+         to_user=tracker.get_slot("to_user")
+         nick_name=tracker.latest_message.get('metadata').get('nick_name')
 
-        # retrieve row based on email
-        cursor.execute("SELECT * FROM orders WHERE order_email=?", order_email)
-        data_row = cursor.fetchone()
+         data = {
+         "action": "transfer",
+         "to_user"  :to_user,
+         "from_user":nick_name,
+         "amount"   :amount
 
-        if data_row:
-            # change status of entry
-            status = [("returning"), (tracker.get_slot("email"))]
-            cursor.execute("UPDATE orders SET status=? WHERE order_email=?", status)
-            connection.commit()
-            connection.close()
+         }
+         json_data = json.dumps(data)
+         print("request data",json_data)
+         headers = {'Content-Type': 'application/json'}
+         #headers = {'Accept':'application/json'}
+         response = requests.get(url,headers=headers,data=json_data) # API call
 
-            # confirm return
-            dispatcher.utter_message(template="utter_return_finish")
-            return []
-        else:
-            # db didn't have an entry with this email
-            dispatcher.utter_message(template="utter_no_order")
-            connection.close()
-            return []
+         if response.status_code == 200:
+                   dispatcher.utter_message(template="utter_transfer_money")
+         else:
+                  dispatcher.utter_message("Sorry, couldn't transfer funds")
 
-
-class GiveName(Action):
+class ActionRemoveUser(Action):
     def name(self) -> Text:
-        return "action_give_name"
+        return "action_remove_user"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #tracker.get_slot['accountCurrency']
+         nick_name=tracker.latest_message.get('metadata').get('nick_name')
 
-        evt = BotUttered(
-            text = "my name is bot? idk", 
-            metadata = {
-                "nameGiven": "bot"
-            }
-        )
+         url = 'http://events.respark.iitm.ac.in:5000/rp_bank_api'
+         data = {
+         "action": "remove",
+         "nick_name":nick_name
+         }
+         json_data = json.dumps(data)
+         print("request data",json_data)
+         headers = {'Content-Type': 'application/json'}
+         #headers = {'Accept':'application/json'}
+         response = requests.get(url,headers=headers,data=json_data) # API call
 
-        return [evt]
+         if response.status_code == 200:
+                   dispatcher.utter_message(template="utter_remove_user")
+         else:
+                  dispatcher.utter_message("Sorry, couldn't remove user")

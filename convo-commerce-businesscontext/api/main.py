@@ -3,6 +3,7 @@ import requests
 from flask import Flask, request
 from markupsafe import escape
 import json
+import re
 
 app = Flask(__name__)
 t2t = None
@@ -22,8 +23,8 @@ def get_intent(base_url, sender_id, text):
     return {"context": res["intent"]["name"], "intent_ranking": res["intent_ranking"]}
 
 
-def get_conversation(base_url, sender_id, message):
-    body = {"sender_id": sender_id, "message": message}
+def get_conversation(base_url, sender_id, message,metadata):
+    body = {"sender_id": sender_id, "message": message,"metadata":metadata}
     res = requests.post(base_url + "/webhooks/rest/webhook", json=body).json()
     return [e["text"] for e in res]
 
@@ -33,6 +34,7 @@ def process_req():
     req_json = request.json
     sender_id = req_json["sender_id"]
     message = req_json["message"]
+    metadata = req_json["metadata"]
     r = {
         "nextStep": {},
         "data": [],
@@ -41,7 +43,7 @@ def process_req():
     intent_res = get_intent(
         BASE_URL, sender_id, message )
     conversations = get_conversation(
-        BASE_URL, sender_id, message)
+        BASE_URL, sender_id, message,metadata)
     r["context"] = intent_res["context"]
     intent_ranking = intent_res["intent_ranking"]
     all_messages = []
@@ -71,6 +73,15 @@ def pop_data_from_conversations(conversation_arr):
 def parse_data(data_str: str):
     if data_str == None:
         return []
+    regex = r'ObjectId\("([a-fA-F0-9]+)"\)'
+
+    # Find all matches of ObjectId instances in the input string
+    matches = re.findall(regex, data_str)
+
+    # Replace each match with a string representation of the ObjectId
+    for match in matches:
+        data_str = data_str.replace(f'ObjectId("{match}")', f'"{match}"')
+
     return json.loads(data_str[9:])
 
 

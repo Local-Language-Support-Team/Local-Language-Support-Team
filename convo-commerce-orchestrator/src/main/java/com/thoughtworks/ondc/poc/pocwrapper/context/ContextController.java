@@ -1,16 +1,16 @@
 package com.thoughtworks.ondc.poc.pocwrapper.context;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.ondc.poc.pocwrapper.asr.SpeechService;
 import com.thoughtworks.ondc.poc.pocwrapper.translation.TranslationService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.List;
-import java.util.Map;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/v1/context")
@@ -26,63 +26,45 @@ public class ContextController {
         this.speechService = speechService;
     }
 
-    @GetMapping("/en/text")
-    ResponseEntity<ContextResponse> getContext(@RequestParam(name = "input") String input) {
-        ContextResponse response = contextService.getContext(input);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(path = "/hindi")
-    ResponseEntity<ContextResponse> getContextFromAudio(@RequestParam(name = "input") String input) {
-        String translatedText = translationService.translateFromHindiToEnglish(input);
-        log.info("Translated text : " + translatedText);
-        ContextResponse response = contextService.getContext(translatedText);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(path = "/hi/audio")
-    ContextResponse getContextFromAudio(
-            @RequestParam(name = "senderId",required = false) String senderId,
-            @RequestParam(name = "file") MultipartFile file) throws IOException, InterruptedException {
-        return getContextFromAudio(senderId,"hi",file);
-    }
-
     @PostMapping(path = "/audio")
-    ContextResponse getContextFromAudio(
-            @RequestParam(name = "senderId",required = false) String senderId,
+    IndicResponse getContextFromAudio(
+            @RequestParam(name = "senderId") String senderId,
             @RequestParam(name = "sourceLang") String sourceLang,
-            @RequestParam(name = "file") MultipartFile file) throws IOException, InterruptedException {
+            @RequestParam(name = "file") MultipartFile file,
+            @RequestParam String metaData) throws IOException, InterruptedException {
+
+        byte[] decodedBytes = Base64.getDecoder().decode(metaData);
+        String decodedString = new String(decodedBytes);
+        RequestData requestData = new ObjectMapper().readValue(decodedString, RequestData.class);
+
         log.info("Audio size is : " + file.getSize());
         String indicText = speechService.getTextFromFile(file, sourceLang);
         log.info("Audio to Text : " + indicText);
 
-        if (indicText.isEmpty()) {
-            return failedContentResponse();
-        }
         log.info("Translating text... ");
         String translatedText = translationService.translateFromIndicToEnglish(indicText, sourceLang);
         log.info("Translated text : " + translatedText);
-        if (translatedText.isEmpty()) {
-            return failedContentResponse();
-        }
+
         log.info("Fetching context... ");
-        ContextResponse response = contextService.getContext(translatedText);
-
-        if(response.getData().get(0).get("ProdName") == null){
-            return response;
+        ContextResponse response = contextService.getContext(translatedText,requestData);
+        String message = response.getNextStep().getMessage();
+        if(response.getData().size() == 0){
+            return  new IndicResponse(translationService.translateFromEnglishToIndic(message, sourceLang));
         }
-
-        log.info("Translating to indic...");
-        List<Map<String, String>> data= response.getData();
-        for(int index = 0 ; index < data.size() ; index++){
-            Map<String, String> product = data.get(index);
-            String translatedIndicText = translationService.translateFromEnglishToIndic(product.get("ProdName"),sourceLang);
-            product.replace("ProdName", translatedIndicText);
+        String res = "";
+        log.info("Translating to indic... ");
+        for (Map<String, String> myMap : response.getData()) {
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> entry : myMap.entrySet()) {
+                sb.append(entry.getKey() + ":" + entry.getValue() + ",");
+            }
+            res += translationService.translateFromEnglishToIndic(sb.toString(), sourceLang);
         }
-
+        IndicResponse indicResponse = new IndicResponse(res);
         log.info("Done");
-        response.setData(data);
-        return response;
+
+        return indicResponse;
+
     }
 
     private ContextResponse failedContentResponse() {

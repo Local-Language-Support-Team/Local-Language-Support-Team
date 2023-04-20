@@ -1,340 +1,52 @@
 version: "2.0"
 nlu:
-- regex: inventorySize
-  examples: |
-    - ^\d+$
+  - regex: amount
+    examples: |
+      - ^\d+$
+  - intent: ask_account_balance
+    examples: |
+      - What's my account balance?
+      - Can you tell me my current balance?
+      - How much money do I have in my account?
+      - What's my available balance?
+  - intent: transfer_money
+    examples: |
+      - Transfer [500](amount) to [Kamesh](to_user)
+      - Send [200](amount) to account number [Venu](to_user)
+      - Transfer [50.50](amount) to [irfan](to_user)
+      - I want to send [1000](amount) to [Murli](to_user)
+      - Can you transfer [2500](amount) to [Chandrika](to_user)?
+      - Please transfer [800](amount) to [Rajesh](to_user)
+      - I want to send [50](amount) to [Kawal](to_user)
+      - I would like to transfer [1500](amount) to [Robert](to_user) please
+      - Can you transfer [100](amount) to [john](to_user)?
+      - I want to send [700](amount) to [paul](to_user)
 
-- intent: order_status
-  examples: |
-    - Show me my orders
-    - show me the orders
-    - check status of orders by [Romel Kumar](name)
-    - check status of orders by [romel](name)
-    - what are the things coming in for [Umesh](name)
-    - I'd like to check the status of the order for [Umesh Mohanty](name)
-    - check status for [romel](name) orders
-    - check status for [Romel](name)'s orders
-    - I'd like an update on my order
-    - Check status of my order
-    - I haven't received my order yet, can we check that?
-    - where is my order?
-    - I want to check the status of my order
-    - actually can I check the status of my order
-- intent: order_cancel
-  examples: |
-    - i'd like to cancel my order
-    - cancel my shoes
-    - I changed my mind on my order
-    - cancel my order
-- intent: return
-  examples: |
-    - start a return
-    - I don't want my shoes anymore
-    - how do I return these?
-    - return some shoes
-    - Which items are available to return?
-    - Start a return
-    - Okay. I would like to return some shoes I bought
-    - yeah I want to return something
-- intent: product_stock_add
-  examples: |
-    - add [Grocery](productCategory) in stock
-    - I want to sell [5](inventorySize) more [apple](productName)
-    - I want to sell [20](inventorySize) [apple](productName)
-    - add [2](inventorySize) [Garlic](productName) to the catalogue
-    - add [50](inventorySize) [poha](productName) to the stock
-- intent: product_stock_filter
-  examples: |
-    - show me [Grocery](productCategory) in stock where less than [5](inventorySize) are left
-    - what [apple](productName) have less than [20](inventorySize) in stock
-    - Are there [Grocery](productCategory) with less than [20](inventorySize) stock in the inventory?
-    - what all [rice](productName) have [3](inventorySize) remaining
-- intent: product_stock
-  examples: |
-    - do you have any [Grocery](productCategory) in stock?
-    - what about [General](productCategory)
-    - what's your inventory
-    - do you have my special shoes in stock
-    - What all products are available in [Grocery](productCategory)
-    - Check inventory for [Grocery](productCategory)
-    - i'm looking for new products
-    - show me [apple](productName) in stock
-    - Are there [rice](productName) in stock
-    - What are the different [Poha](productName) in stock
-    - Are there [biscuits](productName) in the products
-    - is there a [Cookie](productName) in my inventory
-- intent: product_updates
-  examples: |
-    - what's new on the site?
-    - how do I find out updates
-    - I'd like to sign up for updates
-    - Subscribe to product updates
-    - subscribe to updates
-    - i [don't](negation) want to subscribe
-    - I [do not](negation) subscribe
-- intent: inform
-  examples: |
-    - [aata](productName)
-    - [Almond](productName)
-    - [American](productName)
-    - [Amul](productName)
-    - [Apple](productName)
-    - [Apples](productName)
-    - [Ashirwaad](productName)
-    - [Ashirwaad](productName)
-    - [Atta](productName)
-    - [Aubergine](productName)
-    - [Baby cream](productName)
-    - [Bajaj](productName)
-    - [Bajra](productName)
-    - [Basmati](productName)
-    - [Besan](productName)
-    - [Bionova](productName)
-    - [Biscuit](productName)
-    - [Biscuits](productName)
-    - [Brinjal](productName)
-    - [Britania](productName)
-    - [Britannia](productName)
-    - [Butter](productName)
-    - [Cabbage](productName)
-    - [Cauliflower](productName)
-    - [Cheeze](productName)
-    - [Chillies](productName)
-    - [Chillis](productName)
-    - [Chocolate](productName)
-    - [Chocopie](productName)
-    - [Cinthol](productName)
-    - [Coconut](productName)
-    - [Coconuts](productName)
-    - [Coriander](productName)
-    - [Cream](productName)
-    - [Cube](productName)
-    - [Daawat](productName)
-    - [Dawat](productName)
-    - [Dettol](productName)
-    - [Digestive](productName)
-    - [eggplant](productName)
-    - [Essentials](productName)
-    - [flattened Rice](productName)
-    - [Flour](productName)
-    - [Full Cream](productName)
-    - [Garlic Butter](productName)
-    - [Garlic](productName)
-    - [Gourd](productName)
-    - [Gram flour](productName)
-    - [Hair Oil](productName)
-    - [Hand](productName)
-    - [Handwash](productName)
-    - [Himalaya](productName)
-    - [Idli](productName)
-    - [India gate](productName)
-    - [Jam](productName)
-    - [Jim and Jam](productName)
-    - [Jim](productName)
-    - [Kashmiri](productName)
-    - [lahasun](productName)
-    - [Leechi](productName)
-    - [Lemon](productName)
-    - [Litchi](productName)
-    - [Lokee](productName)
-    - [Loki](productName)
-    - [Loose](productName)
-    - [Lotte](productName)
-    - [Milk](productName)
-    - [Millets](productName)
-    - [Multigrain](productName)
-    - [Oil](productName)
-    - [Open](productName)
-    - [Orange](productName)
-    - [Oranges](productName)
-    - [Organic](productName)
-    - [packet](productName)
-    - [Poha](productName)
-    - [Rava](productName)
-    - [Refil](productName)
-    - [Rice](productName)
-    - [Rusk](productName)
-    - [Sanitizer](productName)
-    - [Semolina](productName)
-    - [Skimmed Milk](productName)
-    - [slice](productName)
-    - [Soap](productName)
-    - [Spread](productName)
-    - [Toned Milk](productName)
-    - [Unsalted](productName)
-    - [Wheat Flour](productName)
-    - [Wheat](productName) 
-    - example@rasa.com
-    - my name is [Shyam](name)
-    - it's Romel Kumar
-    - [black](color) shoes
-    - [white](color) ones
-    - I'm looking for [orange](color) shoes
-    - [brown](color)
-    - [blue](color)
-    - [General](productCategory)
-    - [Grocery](productCategory)
-    - [Dairy Products](productCategory)
-    - [Fruits](productCategory)
-    - [vegetables](productCategory)
-    - [Fruits/Vegetables](productCategory)
-    - [Personal Care](productCategory)
-    - it's 123
-    - it's RomelKumar
-    - xyz@hulaloo.ai
-    - gray
-    - [Maize](color) and [blue](color)
-    - Umesh Mohanty
-    - [Grey](color)
-    - UmeshMohanty
-- intent: order_shoes
-  examples: |
-    - i want to buy shoes
-    - no, don't want to do a return, want to purchase new shoes
-    - since they're in stock, how about I place an order
-- intent: affirm
-  examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
-- intent: deny
-  examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-    - Nah, I would not like to be added to the list
-    - nope
-    - u stink
-- intent: greet
-  examples: |
-    - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
-    - yo
-    - HEY
-    - heyy
-    - Hey!!!
-    - hallo?
-- intent: faq/alternate_info
-  examples: |
-    - Can I provide a phone number instead?
-    - Can anyone look up my status with my e-mail address?
-- intent: faq/sizing_clarification
-  examples: |
-    - American or european sizing?
-- intent: faq/payment_methods
-  examples: |
-    - what kind of payment methods do you offer?
-    - how do I pay
-- intent: faq/promotions
-  examples: |
-    - what kind of deals do you have
-    - are you running anything for black friday
-- intent: chitchat/thanks
-  examples: |
-    - thx
-    - Awesome, thanks!
-    - thanks mate
-    - thank you
-- intent: chitchat/confirm_presence
-  examples: |
-    - are you there?
-- intent: chitchat/capabilities
-  examples: |
-    - What else can you do?
-    - what can you do?
-- intent: chitchat/mood_great
-  examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-    - cool beans
-- intent: chitchat/mood_unhappy
-  examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
-    - this is not working
-    - you suck
-- intent: chitchat/bot_challenge
-  examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
-- intent: chitchat/goodbye
-  examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
-- intent: out_of_scope
-  examples: |
-    - mmm I can't see what you're saying
-    - I am looking forward to my best friend's wedding. Do you have any tuxedo's?
-    - hmmmm
-    - Can I?
-    - Well, okay then
-    - what is the square root of 5
-    - I want to know the weather
-    - what is the meaning of life.
-    - Fridge Isn't Running
-    - my tv isn't working
-    - I want a pizza
-    - my washing machine isn't working
-    - what year is it
-    - order a pizza
-    - I want to order a pizza
-    - what is the weather today
-    - what is the weather
-    - why is the sky blue
-    - blah blah blah
-- intent: whats_your_name
-  examples: |
-    - can you tell me your name?
-    - what's your name?
+  - intent: transaction_history
+    examples: |
+      - Can you display my last 10 transaction history?
+      - can I see my transaction history for the past few days?
+      - I need to check my recent transaction history.
+      - What is the process to display my last 10 transactions?
+      - Please help me display my transaction history.
+  - intent: register_user
+    examples: |
+      - I want to register for net banking
+      - create a new net banking account
+      - I need to sign up for net banking
+      - Please help me register for online banking
+      - Add a new account for online banking
+  - intent: remove_user
+    examples: |
+      - I want to de register for net banking
+      - remove net banking account
+      - delete my account
+      - remove my net banking access
+      - cancel my net banking account
+  - intent: user_information
+    examples: |
+      - Can you provide me my account details?
+      - How can I see my personal information in net banking?
+      - I need to check my account information.
+      - fetch my user details?
+      - Please help me see my account information.

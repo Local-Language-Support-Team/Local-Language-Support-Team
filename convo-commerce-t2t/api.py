@@ -14,6 +14,8 @@ model_path = os.environ['T2T_MODEL_PATH']
 now = datetime.now()
 start_time = now.strftime("%d/%m/%Y %H:%M:%S")
 
+languages = {"telugu" : "te", "english" : "en", "tamil" : "ta", "marathi" : "ma", "hindi": "hi","kannada":"ka","gujarati":"gu"}
+
 def initialize_models():
     global t2t
     t2t = Translate(model_path)
@@ -43,7 +45,7 @@ def translateEnglishToIndic():
 
 
 def validate_language(language):
-    lang_arr = ["te", "hi", "en", "ta", "ml"]
+    lang_arr = ["te", "hi", "en", "ta", "ma","ka","gu"]
     if language not in lang_arr:
         raise {"error": f"{language} is not supported"}
 
@@ -60,9 +62,9 @@ def translate(sentence, source, target):
 #         t2t = Translate(model_path)
     translated_sentence = ""
     if target == "en":
-        translated_sentence = t2t.translate_indic_to_english(source, sentence)
+        translated_sentence = t2t.translate_indic_to_english(languages[source], sentence)
     if source == "en":
-        translated_sentence = t2t.english_to_indic(target, sentence)
+        translated_sentence = t2t.english_to_indic(languages[target], sentence)
     return translated_sentence
 
 if __name__ == "__main__":

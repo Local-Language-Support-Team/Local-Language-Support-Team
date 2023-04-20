@@ -1,5 +1,6 @@
 package com.thoughtworks.ondc.poc.pocwrapper.context.mlapi;
 
+import com.thoughtworks.ondc.poc.pocwrapper.context.RequestData;
 import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,11 @@ public class MLContextWebClient implements InitializingBean {
     @Autowired
     private WebClient.Builder builder;
 
-    public MLContextResponse getContext(String text) {
-        Map<String, String> request = new HashMap<>();
+    public MLContextResponse getContext(String text, RequestData requestData) {
+        Map<String, Object> request = new HashMap<>();
         request.put("message", text);
         request.put("sender_id", "convo-commerce-ui");
+        request.put("metadata", requestData);
 
         return webClient.post()
                 .uri("/next-step")
