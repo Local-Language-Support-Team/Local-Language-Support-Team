@@ -31,7 +31,7 @@ class ActionAccountBalance(Action):
         account_currency = 'INR'
 
         # Set the account_balance slot with the fetched value
-        dispatcher.utter_message(template="utter_account_balance",account_balance=account_balance,account_currency=account_currency)
+        dispatcher.utter_message("your balance is" + account_balance)
         return []
 
 class ActionTransactionHistory(Action):
