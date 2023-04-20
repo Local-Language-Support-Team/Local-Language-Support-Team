@@ -11,6 +11,8 @@ nlu:
       - What's my available balance?
   - intent: transfer_money
     examples: |
+      - Transfer amount to (to_user)
+      - send money to (to_user)
       - Transfer amount to [Kamesh](to_user)
       - Send money to [Venu](to_user)
       - send amount to [hruthika](to_user)
