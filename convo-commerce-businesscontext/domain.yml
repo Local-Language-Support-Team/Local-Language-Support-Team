@@ -5,6 +5,7 @@ intents:
 - register_user
 - remove_user
 - user_information
+- get_amount
 
 entities:
 - amount
@@ -50,6 +51,10 @@ responses:
     - text: Your transaction is siccessful
   utter_user_details:
     - text: Your profile details as follows full name is {full_name}, nick_name is {nick_name}, mobile number is {mob_number} and upi id is {upi_id}.
+  utter_ask_amount:
+    - text: please enter how much amount to transfer?
+  utter_transaction_details:
+    - text: Transaction of amount {amount} rupees to {to_user} is successful.
 
 actions:
   - action_account_balance
@@ -58,6 +63,8 @@ actions:
   - action_transaction_history
   - action_transfer_money
   - action_user_information
+  - utter_ask_amount
+  - utter_transaction_details
 
 forms:
   account_form:

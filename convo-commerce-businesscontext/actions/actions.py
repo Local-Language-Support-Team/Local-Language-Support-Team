@@ -150,7 +150,7 @@ class ActionTransferMoney(Action):
          response = requests.get(url,headers=headers,data=json_data) # API call
 
          if response.status_code == 200:
-                   dispatcher.utter_message(template="utter_transfer_money")
+                   dispatcher.utter_message(template="utter_transaction_details",amount=amount,to_user=to_user)
          else:
                   dispatcher.utter_message("Sorry, couldn't transfer funds")
 

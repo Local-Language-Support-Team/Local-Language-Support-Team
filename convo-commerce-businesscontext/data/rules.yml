@@ -24,9 +24,3 @@ rules:
     steps:
       - intent: user_information
       - action: action_user_information
-  # Fund transfer
-
-  - rule: transfer money
-    steps:
-      - intent: transfer_money
-      - action: action_transfer_money

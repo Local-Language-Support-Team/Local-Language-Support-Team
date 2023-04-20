@@ -11,16 +11,16 @@ nlu:
       - What's my available balance?
   - intent: transfer_money
     examples: |
-      - Transfer [500](amount) to [Kamesh](to_user)
-      - Send [200](amount) to account number [Venu](to_user)
-      - Transfer [50.50](amount) to [irfan](to_user)
-      - I want to send [1000](amount) to [Murli](to_user)
-      - Can you transfer [2500](amount) to [Chandrika](to_user)?
-      - Please transfer [800](amount) to [Rajesh](to_user)
-      - I want to send [50](amount) to [Kawal](to_user)
-      - I would like to transfer [1500](amount) to [Robert](to_user) please
-      - Can you transfer [100](amount) to [john](to_user)?
-      - I want to send [700](amount) to [paul](to_user)
+      - Transfer amount to [Kamesh](to_user)
+      - Send money to [Venu](to_user)
+      - send amount to [hruthika](to_user)
+      - Transfer money to [irfan](to_user)
+      - I want to send amount to [Murli](to_user)
+      - Can you transfer money to [Chandrika](to_user)?
+      - Please transfer amount to [Rajesh](to_user)
+      - I want to send money to [Kawal](to_user)
+      - I would like to transfer money to [Robert](to_user) please
+      - Can you transfer amount to [john](to_user)?
 
   - intent: transaction_history
     examples: |
@@ -50,3 +50,10 @@ nlu:
       - I need to check my account information.
       - fetch my user details?
       - Please help me see my account information.
+  - intent: get_amount
+    examples: |
+      - please enter how much amount to transfer?
+      - transfer [100](amount) rupees.
+      - [100](amount) rupees
+      - send [25](amount) rupees.
+      - [10](amount) rupees
