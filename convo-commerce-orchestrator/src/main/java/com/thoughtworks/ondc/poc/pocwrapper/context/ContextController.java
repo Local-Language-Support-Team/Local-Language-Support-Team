@@ -30,7 +30,7 @@ public class ContextController {
     IndicResponse getContextFromAudio(
             @RequestParam(name = "senderId") String senderId,
             @RequestParam(name = "sourceLang") String sourceLang,
-            @RequestParam(name = "file") MultipartFile file,
+            @RequestBody MultipartFile file,
             @RequestParam String metaData) throws IOException, InterruptedException {
 
         byte[] decodedBytes = Base64.getDecoder().decode(metaData);
