@@ -7,5 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndicResponse {
+    private String input;
     private String result;
 }

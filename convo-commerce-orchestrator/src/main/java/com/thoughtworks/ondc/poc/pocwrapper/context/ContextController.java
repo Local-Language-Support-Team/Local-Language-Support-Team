@@ -49,7 +49,7 @@ public class ContextController {
         ContextResponse response = contextService.getContext(translatedText,requestData);
         String message = response.getNextStep().getMessage();
         if(response.getData().size() == 0){
-            return  new IndicResponse(translationService.translateFromEnglishToIndic(message, sourceLang));
+            return  new IndicResponse(indicText,translationService.translateFromEnglishToIndic(message, sourceLang));
         }
         String res = "";
         log.info("Translating to indic... ");
@@ -60,7 +60,7 @@ public class ContextController {
             }
             res += translationService.translateFromEnglishToIndic(sb.toString(), sourceLang);
         }
-        IndicResponse indicResponse = new IndicResponse(res);
+        IndicResponse indicResponse = new IndicResponse(indicText,res);
         log.info("Done");
 
         return indicResponse;
